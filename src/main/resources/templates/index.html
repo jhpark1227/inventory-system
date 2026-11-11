@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>소모품 재고 관리</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<main class="container">
+    <header class="page-header">
+        <h1>소모품 재고 관리</h1>
+        <p class="current-file">현재 파일: <strong id="file-name">-</strong></p>
+    </header>
+
+    <section class="panel" aria-label="엑셀 파일 가져오기">
+        <label class="upload-label" for="file-input">엑셀 파일 가져오기</label>
+        <div class="upload-row">
+            <input id="file-input" type="file"
+                   accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+            <button id="upload-button" type="button" disabled>업로드</button>
+        </div>
+    </section>
+
+    <section class="panel" aria-label="작업">
+        <div class="actions">
+            <button id="discard-button" type="button" disabled>되돌리기</button>
+            <button id="save-button" type="button" disabled>저장</button>
+            <button id="download-button" type="button" disabled>다운로드</button>
+        </div>
+        <p id="dirty-status" class="status status-dirty" hidden></p>
+        <p id="unexported-status" class="status status-unexported" hidden>저장됨 · 아직 내려받지 않았습니다.</p>
+    </section>
+
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">품목ID</th>
+                <th scope="col">품목명</th>
+                <th scope="col" class="num">현재 수량</th>
+                <th scope="col">최종 수정일시</th>
+                <th scope="col">재고 변경</th>
+            </tr>
+            </thead>
+            <tbody id="item-rows"></tbody>
+        </table>
+    </div>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
