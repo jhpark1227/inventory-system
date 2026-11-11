@@ -53,9 +53,9 @@ ExcelItemParser   ExcelExporter   ← 엑셀 ↔ 품목 변환 (순수 함수, �
 | `service` | `SampleDataLoader` | 새 세션이 시작될 때 `sample/inventory.xlsx`를 읽어 초기 데이터를 만든다 |
 | `excel` | `ExcelItemParser` | 엑셀 바이트를 읽어 형식 규칙을 검증하고 품목 목록(행 번호 포함)으로 변환한다. 첨부와 예시 데이터 로딩이 같은 규칙을 쓴다 |
 | `excel` | `ExcelExporter` | 원본 바이트와 품목의 저장본 값을 받아 수량과 최종 수정일시를 갱신한 새 엑셀 바이트를 만든다 |
-| `domain` | `Item` | 품목ID, 품목명, 저장본 수량, 작업본 수량, 최종 수정일시, 원본 행 번호 |
+| `domain` | `Item`, `Quantity`(수량 상수) | 품목ID, 품목명, 저장본 수량, 작업본 수량, 최종 수정일시, 원본 행 번호 |
 | `dto` | `ItemResponse`, `ItemListResponse`, `ChangeResponse`, `SaveResponse`, `ImportResponse`, `StockChangeRequest`, `ErrorResponse`(`message`만) | API 입출력 |
-| `exception` | `ItemNotFoundException`, `InsufficientStockException`, `StockLimitExceededException`, `InvalidQuantityException`, `InvalidExcelException`(행별 이유를 메시지에 합쳐 담는다), `ExportException` | 업무 예외 |
+| `exception` | `InvalidRequestException`(사용자 요청 오류, 400), `ExportException`(다운로드 파일 생성 실패, 500) | 업무 예외 |
 
 `ExcelItemParser`와 `ExcelExporter`는 바이트 입출력만 하는 순수 변환 클래스라서, 파일 시스템 없이도 단위 테스트할 수 있다. 서버에 저장소 계층(Repository)은 두지 않는다.
 
@@ -169,12 +169,9 @@ server:
   servlet:
     session:
       timeout: 8h
-inventory:
-  excel:
-    max-rows: 1000
 ```
 
-예시 데이터 파일은 클래스패스 `sample/inventory.xlsx`로 고정한다 (설정값으로 두지 않는다).
+예시 데이터 파일은 클래스패스 `sample/inventory.xlsx`로, 최대 데이터 행 수(1,000)는 `ExcelItemParser`의 상수로 고정한다 (설정값으로 두지 않는다).
 
 ## 9. 구현 순서 (제안)
 

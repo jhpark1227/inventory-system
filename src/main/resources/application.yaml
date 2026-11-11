@@ -1,3 +1,11 @@
 spring:
   application:
     name: inventory-system
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+server:
+  servlet:
+    session:
+      timeout: 8h
